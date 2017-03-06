@@ -151,7 +151,11 @@ export class IqSelect2Component<T> implements AfterViewInit, ControlValueAccesso
     private handleMultipleWithIds(selectedValues: any) {
         if (selectedValues !== undefined && this.selectedProvider !== undefined) {
             this.selectedProvider(selectedValues).subscribe((items: T[]) => {
-                items.forEach((item) => this.selectedItems.push(this.iqSelect2ItemAdapter(item)));
+                let ids = this.getSelectedIds();
+
+                items.map(this.iqSelect2ItemAdapter)
+                    .filter((el) => ids.indexOf(el.id) === -1)
+                    .forEach((item) => this.selectedItems.push(item));
             });
         }
     }
