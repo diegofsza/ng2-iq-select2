@@ -37,6 +37,7 @@
         <iq-select2-results #results [selectedItems]="selectedItems" [items]="listData"
                             (itemSelectedEvent)="onItemSelected($event);"
                             [templateRef]="templateRef"
-                            [searchFocused]="searchFocused"></iq-select2-results>
+                            [searchFocused]="searchFocused"
+                            [allowDeselect]="allowAddingNewItems"></iq-select2-results>
     </div>
 </div>

@@ -47,6 +47,7 @@ export class IqSelect2Component<T> implements AfterViewInit, ControlValueAccesso
     };
     @Input() resultsCount;
     @Input() clientMode = false;
+    @Input() allowAddingNewItems: boolean = false;
     @Output() onSelect: EventEmitter<IqSelect2Item> = new EventEmitter<IqSelect2Item>();
     @Output() onRemove: EventEmitter<IqSelect2Item> = new EventEmitter<IqSelect2Item>();
     @ViewChild('termInput') private termInput;
@@ -304,7 +305,15 @@ export class IqSelect2Component<T> implements AfterViewInit, ControlValueAccesso
             } else if (ev.keyCode === KEY_CODE_UP_ARROW) {
                 this.results.activePrevious();
             } else if (ev.keyCode === KEY_CODE_ENTER) {
+              if (this.results.activeIndex !== -1) {
                 this.results.selectCurrentItem();
+              } else if (this.allowAddingNewItems) {
+                let value = ev.target.value.trim();
+                if (value && this.selectedItems.map(item => item.text).indexOf(value) === -1) {
+                  let newItem: any = this.iqSelect2ItemAdapter(value);
+                  this.onItemSelected(newItem);
+                }
+              }
             }
         } else {
             if (this.minimumInputLength === 0) {
