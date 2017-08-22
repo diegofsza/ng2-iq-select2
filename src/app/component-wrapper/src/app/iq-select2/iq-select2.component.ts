@@ -48,6 +48,7 @@ export class IqSelect2Component<T> implements AfterViewInit, ControlValueAccesso
     @Input() resultsCount;
     @Input() clientMode = false;
     @Input() allowAddingNewItems: boolean = false;
+    @Input() caseSensitiveSelection: boolean = false;
     @Output() onSelect: EventEmitter<IqSelect2Item> = new EventEmitter<IqSelect2Item>();
     @Output() onRemove: EventEmitter<IqSelect2Item> = new EventEmitter<IqSelect2Item>();
     @ViewChild('termInput') private termInput;
@@ -84,7 +85,12 @@ export class IqSelect2Component<T> implements AfterViewInit, ControlValueAccesso
             .switchMap(term => this.loadDataFromObservable(term))
             .map(items => items.filter(item => !(this.multiple && this.alreadySelected(item))))
             .do(() => this.resultsVisible = this.searchFocused)
-            .subscribe((items) => this.listData = items);
+            .subscribe((items) => {
+              this.listData = items;
+              if (this.listData.length === 0) {
+                this.results.activeIndex = -1;
+              }
+            });
     }
 
     private loadDataFromObservable(term: string): Observable<IqSelect2Item[]> {
@@ -309,7 +315,7 @@ export class IqSelect2Component<T> implements AfterViewInit, ControlValueAccesso
                 this.results.selectCurrentItem();
               } else if (this.allowAddingNewItems) {
                 let value = ev.target.value.trim();
-                if (value && this.selectedItems.map(item => item.text).indexOf(value) === -1) {
+                if (value && !this.selected(value)) {
                   let newItem: any = this.iqSelect2ItemAdapter(value);
                   this.onItemSelected(newItem);
                 }
@@ -322,6 +328,12 @@ export class IqSelect2Component<T> implements AfterViewInit, ControlValueAccesso
                 }
             }
         }
+    }
+
+    selected(value) {
+      return this.selectedItems.map(item => {
+        return this.caseSensitiveSelection ? item.text : item.text.toLowerCase();
+      }).indexOf(this.caseSensitiveSelection ? value : value.toLowerCase()) !== -1;
     }
 
     onKeyDown(ev) {

@@ -146,6 +146,8 @@ Configuration options (Inputs and Outputs)
 
 +*@Input()* **allowAddingNewItems**: flag to control whether a user can type in a search term that is not in the result list
 
++*@Input()* **caseSensitiveSelection**: flag to control whether user-entered options are compared in a case-sensitive manner
+
 *@Output()* **onSelect(item: IqSelect2Item)**: event triggered when an item is selected
 
 *@Output()* **onRemove(item: IqSelect2Item)**: event triggered when an item is removed
