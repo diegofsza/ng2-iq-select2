@@ -87,7 +87,7 @@ export class IqSelect2Component<T> implements AfterViewInit, ControlValueAccesso
             .do(() => this.resultsVisible = this.searchFocused)
             .subscribe((items) => {
               this.listData = items;
-              if (this.listData.length === 0) {
+              if (this.listData.length === 0 && this.results) {
                 this.results.activeIndex = -1;
               }
             });
