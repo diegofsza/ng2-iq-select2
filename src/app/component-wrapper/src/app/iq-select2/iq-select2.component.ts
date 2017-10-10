@@ -229,8 +229,8 @@ export class IqSelect2Component implements AfterViewInit, ControlValueAccessor {
 
         this.onChangeCallback(this.buildValue());
         this.term.patchValue('', {emitEvent: false});
-        setTimeout(() => this.focusInput(), 1);
         this.resultsVisible = false;
+        this.searchFocused = false;
         this.onSelect.emit(item);
         if (!this.multiple) {
             this.placeholderSelected = item.text;
