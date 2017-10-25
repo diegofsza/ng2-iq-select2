@@ -47,6 +47,8 @@ export class IqSelect2Component implements AfterViewInit, ControlValueAccessor {
     };
     @Input() resultsCount;
     @Input() clientMode = false;
+    @Input() allowAddingNewItems: boolean = false;
+    @Input() caseSensitiveSelection: boolean = false;
     @Output() onSelect: EventEmitter<IqSelect2Item> = new EventEmitter<IqSelect2Item>();
     @Output() onRemove: EventEmitter<IqSelect2Item> = new EventEmitter<IqSelect2Item>();
     @ViewChild('termInput') private termInput;
@@ -83,7 +85,12 @@ export class IqSelect2Component implements AfterViewInit, ControlValueAccessor {
             .switchMap(term => this.loadDataFromObservable(term))
             .map(items => items.filter(item => !(this.multiple && this.alreadySelected(item))))
             .do(() => this.resultsVisible = this.searchFocused)
-            .subscribe((items) => this.listData = items);
+            .subscribe((items) => {
+              this.listData = items;
+              if (this.listData.length === 0 && this.results) {
+                this.results.activeIndex = -1;
+              }
+            });
     }
 
     private loadDataFromObservable(term: string): Observable<IqSelect2Item[]> {
@@ -309,7 +316,15 @@ export class IqSelect2Component implements AfterViewInit, ControlValueAccessor {
             } else if (ev.keyCode === KEY_CODE_UP_ARROW) {
                 this.results.activePrevious();
             } else if (ev.keyCode === KEY_CODE_ENTER) {
+              if (this.results.activeIndex !== -1) {
                 this.results.selectCurrentItem();
+              } else if (this.allowAddingNewItems) {
+                let value = ev.target.value.trim();
+                if (value && !this.selected(value)) {
+                  let newItem: any = this.iqSelect2ItemAdapter(value);
+                  this.onItemSelected(newItem);
+                }
+              }
             }
         } else {
             if (this.minimumInputLength === 0) {
@@ -318,6 +333,12 @@ export class IqSelect2Component implements AfterViewInit, ControlValueAccessor {
                 }
             }
         }
+    }
+
+    selected(value) {
+      return this.selectedItems.map(item => {
+        return this.caseSensitiveSelection ? item.text : item.text.toLowerCase();
+      }).indexOf(this.caseSensitiveSelection ? value : value.toLowerCase()) !== -1;
     }
 
     onKeyDown(ev) {

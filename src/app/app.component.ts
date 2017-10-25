@@ -79,6 +79,12 @@ export class AppComponent implements OnInit {
         };
         this.getItems = (ids: string[]) => this.dataService.getItems(ids);
         this.entityToIqSelect2Item = (entity: any) => {
+            if (typeof entity === 'string') {
+              return {
+                id: null,
+                text: entity
+              };
+            }
             return {
                 id: entity.id,
                 text: entity.name,

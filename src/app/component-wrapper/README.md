@@ -34,8 +34,8 @@ import { IqSelect2Module } from 'ng2-iq-select2';
 *html file*
 ```html
 <form [formGroup]="form">
-    <iq-select2 css="form-control input-sm" 
-                formControlName="country" 
+    <iq-select2 css="form-control input-sm"
+                formControlName="country"
                 [dataSourceProvider]="listCountries"
                 [selectedProvider]="loadFromIds"
                 [iqSelect2ItemAdapter]="adapter"></iq-select2>
@@ -45,8 +45,8 @@ import { IqSelect2Module } from 'ng2-iq-select2';
 *html file (custom template)*
 ```html
 <form [formGroup]="form">
-  <iq-select2 css="form-control input-sm" 
-                formControlName="country" 
+  <iq-select2 css="form-control input-sm"
+                formControlName="country"
                 [dataSourceProvider]="listCountries"
                 [selectedProvider]="loadFromIds"
                 [iqSelect2ItemAdapter]="adapter">
@@ -68,7 +68,7 @@ export class Example {
 //
     constructor(private countriesService: CountryService,
                 private formBuilder: FormBuilder){
-    
+
     }
 //
     ngOnInit() {
@@ -100,10 +100,10 @@ interface IqSelect2Item {
 *Messages*
 ```javascript
 export class Messages {
-    
+
      static readonly PARTIAL_COUNT_VAR; // Variable to be replaced by the amount of results being shown
      static readonly TOTAL_COUNT_VAR; // Variable to be replaced by the total count of results
-    
+
     moreResultsAvailableMsg?: string;
     noResultsAvailableMsg?: string;
 }
@@ -143,6 +143,10 @@ Configuration options (Inputs and Outputs)
 *@Input()* **searchIcon**: css icon on the right of the input
 
 *@Input()* **deleteIcon**: css icon to be used to remove selected option (In single mode)
+
++*@Input()* **allowAddingNewItems**: flag to control whether a user can type in a search term that is not in the result list
+
++*@Input()* **caseSensitiveSelection**: flag to control whether user-entered options are compared in a case-sensitive manner
 
 *@Output()* **onSelect(item: IqSelect2Item)**: event triggered when an item is selected
 

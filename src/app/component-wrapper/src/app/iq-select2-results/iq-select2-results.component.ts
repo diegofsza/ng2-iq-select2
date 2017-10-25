@@ -12,6 +12,7 @@ export class IqSelect2ResultsComponent implements OnInit {
     @Input() searchFocused: boolean;
     @Input() selectedItems: IqSelect2Item[];
     @Input() templateRef: TemplateRef<any>;
+    @Input() allowDeselect: boolean = false;
     @Output() itemSelectedEvent: EventEmitter<any> = new EventEmitter();
     activeIndex: number = 0;
     private ussingKeys = false;
@@ -20,6 +21,9 @@ export class IqSelect2ResultsComponent implements OnInit {
     }
 
     ngOnInit() {
+      if (this.allowDeselect) {
+        this.activeIndex = -1;
+      }
     }
 
     onItemSelected(item: IqSelect2Item) {
@@ -28,7 +32,7 @@ export class IqSelect2ResultsComponent implements OnInit {
 
     activeNext() {
         if (this.activeIndex >= this.items.length - 1) {
-            this.activeIndex = this.items.length - 1;
+            this.activeIndex = this.allowDeselect ? -1 : this.items.length - 1;
         } else {
             this.activeIndex++;
         }
@@ -37,8 +41,12 @@ export class IqSelect2ResultsComponent implements OnInit {
     }
 
     activePrevious() {
-        if (this.activeIndex - 1 < 0) {
-            this.activeIndex = 0;
+        if (this.activeIndex <= 0) {
+            if (this.allowDeselect) {
+                this.activeIndex = (this.activeIndex === 0) ? -1 : this.items.length - 1;
+            } else {
+                this.activeIndex = 0;
+            }
         } else {
             this.activeIndex--;
         }
