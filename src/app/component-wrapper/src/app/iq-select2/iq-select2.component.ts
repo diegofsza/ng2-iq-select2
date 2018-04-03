@@ -73,7 +73,7 @@ export class IqSelect2Component implements AfterViewInit, ControlValueAccessor {
     }
 
     writeValue(selectedValues: any): void {
-        if (selectedValues) {
+        if (selectedValues || selectedValues === 0) {
             if (this.referenceMode === 'id') {
                 this.populateItemsFromIds(selectedValues);
             } else {
